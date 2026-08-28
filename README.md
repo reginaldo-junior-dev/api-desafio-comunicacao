@@ -41,23 +41,23 @@ Para rodar o projeto você precisa de:
 
 ## Configuração (variáveis de ambiente)
 
-A aplicação lê as configurações de banco do arquivo [`.env`](.env) na raiz do projeto:
+A aplicação lê as configurações de banco do arquivo `.env` na raiz do projeto. Crie o arquivo (ele **não** é versionado — já está no `.gitignore`) com o seguinte conteúdo, trocando a senha pela que você preferir:
 
 ```env
 DB_URL=jdbc:postgresql://localhost:5432/api_desafio_comunicacao
 DB_USERNAME=postgres
-DB_PASSWORD=71511419
+DB_PASSWORD=SUA_SENHA_AQUI
 ```
 
 | Variável      | Descrição                                              |
 |---------------|--------------------------------------------------------|
 | `DB_URL`      | URL de conexão JDBC com o PostgreSQL                   |
 | `DB_USERNAME` | Usuário do banco                                       |
-| `DB_PASSWORD` | Senha do banco                                         |
+| `DB_PASSWORD` | Senha do banco (defina a sua própria)                  |
 
 - Ao rodar **sem Docker**, o Maven carrega este arquivo `.env` automaticamente.
-- Ao rodar **com Docker Compose**, o arquivo `.env` é usado pelo compose para definir a senha do banco e as variáveis do container da API.
-- ⚠️ **Importante**: se você alterar a senha no `.env`, altere também onde ela é usada (o compose usa `${DB_PASSWORD}` de forma automática, então basta manter o `.env` consistente).
+- Ao rodar **com Docker Compose**, o arquivo `.env` é usado pelo compose para definir a senha do banco e as variáveis do container da API (o compose usa `${DB_PASSWORD}` de forma automática, então basta manter o `.env` consistente).
+- ⚠️ **Atenção**: não publique nem versione a senha real. Use uma senha forte e mantenha o `.env` apenas localmente.
 
 ---
 
@@ -148,10 +148,12 @@ Você pode subir o PostgreSQL sozinho com Docker:
 docker run --name comunicacao-postgres `
   -e POSTGRES_DB=api_desafio_comunicacao `
   -e POSTGRES_USER=postgres `
-  -e POSTGRES_PASSWORD=71511419 `
+  -e POSTGRES_PASSWORD=SUA_SENHA_AQUI `
   -p 5432:5432 `
   -d postgres:18
 ```
+
+> ⚠️ Use aqui a **mesma senha** definida no seu arquivo `.env`.
 
 Ou, se preferir, edite o `docker-compose.yml` para subir só o serviço `postgres`:
 
@@ -161,12 +163,12 @@ docker compose up -d postgres
 
 ### Passo 2 — Confira o `.env`
 
-Como o banco está rodando na sua máquina, o `.env` já vem configurado corretamente:
+Como o banco está rodando na sua máquina, o `.env` deve estar configurado assim (use a senha que você definiu):
 
 ```env
 DB_URL=jdbc:postgresql://localhost:5432/api_desafio_comunicacao
 DB_USERNAME=postgres
-DB_PASSWORD=71511419
+DB_PASSWORD=SUA_SENHA_AQUI
 ```
 
 > ⚠️ Se a porta `5432` já estiver em uso na sua máquina (por exemplo, um PostgreSQL instalado localmente), pare esse serviço antes ou troque a porta.
