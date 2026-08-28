@@ -28,4 +28,10 @@ public class AgendamentoController {
         AgendamentoResponse agendamentoResponse =  agendamentoService.consulta(id);
         return ResponseEntity.ok(agendamentoResponse);
     }
+
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<AgendamentoResponse> cancelarAgendamento (@PathVariable UUID id) {
+        AgendamentoResponse agendamentoResponse = agendamentoService.cancelarAgendamento(id);
+        return ResponseEntity.ok(agendamentoResponse);
+    }
 }
