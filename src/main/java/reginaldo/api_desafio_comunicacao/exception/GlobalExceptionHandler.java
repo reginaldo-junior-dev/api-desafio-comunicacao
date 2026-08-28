@@ -1,5 +1,6 @@
 package reginaldo.api_desafio_comunicacao.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,7 +14,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> erro(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> erroValidacao(MethodArgumentNotValidException ex,
+                                                       HttpServletRequest request) {
 
         Map<String, String> erros = new HashMap<>();
 
@@ -22,15 +24,29 @@ public class GlobalExceptionHandler {
         }
 
         ErrorResponse errorResponse = new ErrorResponse(
-                422,
-                "Unprocessable Entity",
+                         HttpStatus.UNPROCESSABLE_CONTENT.value(),
+                   "Unprocessable Entity",
                 "Dados inválidos",
-                       erros,
-                  "/agendamento"
+                         erros,
+                         request.getRequestURI()
         );
 
         return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_CONTENT)
                 .body(errorResponse);
+    }
+
+    @ExceptionHandler(AgendamentoNaoEncontrado.class)
+    public ResponseEntity<ErrorResponse> erroConsulta(AgendamentoNaoEncontrado ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                      HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                      ex.getMessage(),
+                null,
+                      request.getRequestURI()
+
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 }
